@@ -1,5 +1,13 @@
 # Alpaca Turbo
 
+##### [Discord](https://discord.gg/pm4JzCBHNn)
+
+
+![Alpaca-Turbo Screenshot 2](https://i.ibb.co/1Kq4Lpq/screenshot2.png)
+
+
+![Alpaca-Turbo Screenshot 1](https://i.ibb.co/k0b9DDj/screenshot1.png)
+
 Alpaca Turbo is a user interface (UI) that allows you to interact with Alpaca using the Alpaca Turbo Engine, a strong open-source instruction-following model based on LLaMA. Alpaca can answer questions, reason, tell jokes, and perform various tasks given natural language instructions. Alpaca Turbo uses text generation AI to create engaging and natural responses for the user.
 
 ## Features
