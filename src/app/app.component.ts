@@ -64,7 +64,10 @@ export class AppComponent implements AfterViewInit{
   openSettingPage() {
     // @ts-ignore
     document.getElementById("setting-page").style.display = "block";
+    // @ts-ignore
+    this.chatInput.disabled = true;
   }
+
   openAdvancedMode() {
     if (this.advancedMode) {
       // @ts-ignore
@@ -246,6 +249,8 @@ export class AppComponent implements AfterViewInit{
   public openChangeModel() {
     // @ts-ignore
     document.getElementById("changeModelPage").style.transform = "translateY(0)"
+    // @ts-ignore
+    document.getElementById("chat-input").disabled = true;
   }
 
   checkServerStatus() {

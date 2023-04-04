@@ -2,10 +2,7 @@ import {Component, Input} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {ChangeModelServiceService} from "../../services/change-model-service.service";
 import {SettingServiceService} from "../../services/setting-service.service";
-import {Observable} from "rxjs";
-import {environment} from "../../environments/environment";
 import {HomeServiceService} from "../../services/home-service.service";
-import {ChangeModelComponent} from "../change-model/change-model.component";
 
 @Component({
   selector: 'app-setting',
@@ -37,6 +34,8 @@ export class SettingComponent {
   closeSetting() {
     // @ts-ignore
     document.getElementById("setting-page").style.display = "none";
+    // @ts-ignore
+    document.getElementById("chat-input").disabled = false;
   }
 
   getSetting() {
@@ -67,6 +66,7 @@ export class SettingComponent {
       "top_k": this.top_k,
       "top_p": this.top_p
     }
+    this.homeService.stopGenerating().subscribe();
 
     this.SettingService.postSetting(body).subscribe((response) => {
       if (response.success) {
@@ -75,19 +75,22 @@ export class SettingComponent {
       }
     });
 
-    this.homeService.stopGenerating().subscribe();
-    //this.SettingService.onloadModel().subscribe();
-
-    this.changeModelService.loadModels().subscribe((res) => {
-      this.models = res;
-      //@ts-ignore
-      document.querySelector('.notification').innerText = "Setting has been changed successfully, Waiting to reload the model !";
-      // @ts-ignore
-      //this.changeModelService.changeModel(this.models.indexOf(this.model_loaded)).subscribe((res) => {
-        //@ts-ignore
-        //document.querySelector('.notification').innerText = "Setting has been changed successfully !";
-      //})
-    })
-
+    this.SettingService.getSetting().subscribe((res) => {
+      if(res.seed != this.seed || res.repeat_last_n != this.repeat_last_n || res.n_predict != this.n_predict){
+        this.SettingService.onloadModel().subscribe();
+        console.log(res);
+    
+        this.changeModelService.loadModels().subscribe((res) => {
+          this.models = res;
+          //@ts-ignore
+          document.querySelector('.notification').innerText = "Setting has been changed successfully, Waiting to reload the model !";
+          // @ts-ignore
+          this.changeModelService.changeModel(this.models.indexOf(this.model_loaded)).subscribe((res) => {
+            //@ts-ignore
+            document.querySelector('.notification').innerText = "Setting has been changed successfully !";
+          })
+        })
+      }
+    });
   }
 }

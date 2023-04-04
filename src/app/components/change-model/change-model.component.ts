@@ -45,11 +45,15 @@ export class ChangeModelComponent implements OnInit {
   closeModel(): void {
     // @ts-ignore
     document.getElementById("changeModelPage").style.transform = "translateY(-200%)"
+    // @ts-ignore
+    document.getElementById("chat-input").disabled = false;
   }
 
   openChangeModel() {
     // @ts-ignore
     document.getElementById("changeModelPage").style.transform = "translateY(0)"
+    // @ts-ignore
+    document.getElementById("chat-input").disabled = true;
   }
 
   selectedModel(event: Event): void {
