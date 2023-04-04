@@ -101,6 +101,8 @@ export class AppComponent implements AfterViewInit{
 
     this.homeService.sendPrompt(body);
     this.outputText = "";
+    // @ts-ignore
+    this.chatInput.value = "";
   }
 
   ReceiveResponseStream() {
