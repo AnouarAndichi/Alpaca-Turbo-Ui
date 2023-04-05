@@ -141,6 +141,14 @@ export class AppComponent implements AfterViewInit{
     }
   }
 
+  showMainHero() {
+    if (this.mainHero && this.chatSection) {
+      this.mainHero.style.display = 'flex';
+      this.chatSection.style.display = 'none';
+    }
+  }
+
+
   createChatNode(text: string, type: string){
     let mainNod = document.createElement('div');
     let img = document.createElement('img');
@@ -318,9 +326,12 @@ export class AppComponent implements AfterViewInit{
 
   openNewChat() {
     if (this.server_status === 'generating') this.homeService.stopGenerating().subscribe();
+    this.homeService.stopGenerating().subscribe();
     this.homeService.saveChat().subscribe();
     this.homeService.clearChat().subscribe();
-    this.clearConversation()
+    this.clearConversation();
+    this.showMainHero();
+    this.getHistoryChat();
     // @ts-ignore
     document.querySelector('.chat-input').disabled = false;
   }
@@ -336,11 +347,15 @@ export class AppComponent implements AfterViewInit{
         helper.push(chat);
       });
       this.chatHistoryData = helper;
-      this.loadHistoryData(this.chatHistoryData);
+      this.loadHistoryData(this.chatHistoryData.reverse());
     });
   }
 
   loadHistoryData(history: { name: string; data: any; }[]) {
+    let oldHistory = document.querySelectorAll('.recent-chat');
+    oldHistory.forEach((item) => {
+      item.remove();
+    })
     this.chatHistoryData.forEach((chat) => {
       let chatHistoryDiv = document.querySelector('.recent-chats');
 
@@ -415,5 +430,9 @@ export class AppComponent implements AfterViewInit{
   openSideBarMenu() {
     // @ts-ignore
     this.sideBar.classList.toggle('toggleSideBar');
+  }
+
+  reloadModel(){
+    
   }
 }
