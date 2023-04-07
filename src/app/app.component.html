@@ -11,7 +11,7 @@
 
 <body>
 <app-setting [model_loaded]="model_loaded" id="setting-page"></app-setting>
-<app-change-model [model_loaded]="model_loaded"></app-change-model>
+<app-change-model *ngIf="!model_loaded" [model_loaded]="model_loaded"></app-change-model>
 <div class="container">
   <div class="sidebar">
     <div class="sidebar-header">

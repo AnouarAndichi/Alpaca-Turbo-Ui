@@ -22,6 +22,7 @@ export class AppComponent implements AfterViewInit{
   private personas: [] = [];
 
   //information variables
+  // @ts-ignore
   public model_loaded: string = "";
   public server_status: string = "";
   public cpu_percent: number = 0;
@@ -339,9 +340,17 @@ export class AppComponent implements AfterViewInit{
   }
 
   openNewChat() {
+    this.notification?.parentElement?.classList.remove('showNotification');
+
     if (this.server_status === 'generating') this.homeService.stopGenerating().subscribe();
     this.homeService.stopGenerating().subscribe();
-    this.homeService.saveChat().subscribe();
+    this.homeService.saveChat().subscribe((res) => {
+      if (res === 'success') {
+        //@ts-ignore
+        this.notification.innerText = "Your chat has been saved successfully! <3";
+        this.notification?.parentElement?.classList.add('showNotification');
+      }
+    });
     this.homeService.clearChat().subscribe();
     this.clearConversation();
     this.showMainHero();

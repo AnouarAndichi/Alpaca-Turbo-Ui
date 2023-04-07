@@ -9,19 +9,23 @@ import {ChangeModelServiceService} from "../../services/change-model-service.ser
 @Injectable({
   providedIn: 'root'
 })
-export class ChangeModelComponent implements OnInit {
+
+export class ChangeModelComponent implements OnInit{
   model: number | undefined;
   @Input()
   model_loaded: string = "";
-  notification: string = "";
+  private notification: HTMLElement | undefined;
   constructor(private changeModelService: ChangeModelServiceService) { }
 
   ngOnInit(): void {
+    this.notification = document.querySelector('.notificationText') as HTMLElement;
     this.loadModels();
     setTimeout(() => {
-      if (this.model_loaded !== "") this.closeModel();
+      // @ts-ignore
+      if(document.getElementById('changeModelPage')) document.getElementById('changeModelPage').style.display = 'block';
     }, 2000);
   }
+
 
   loadModels(): void {
     this.changeModelService.loadModels().subscribe((response: []) => {
@@ -35,10 +39,16 @@ export class ChangeModelComponent implements OnInit {
       });
     });
   }
+
   changeModel(): void {
-    this.notification = "Loading the model, please wait ...";
+    // @ts-ignore
+    this.notification.innerText = "Loading the model, please wait ...";
+    this.notification?.parentElement?.classList.add('showNotification');
+
     this.changeModelService.changeModel(this.model).subscribe((response) => {
-      this.notification = response.status;
+      // @ts-ignore
+      this.notification.innerText = response.status;
+      this.closeModel();
     });
   }
 
