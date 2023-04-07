@@ -52,7 +52,7 @@
       </div>
       <div class="sidebar-menu-item" (click)="openChangeModel()">
         <img src="/assets/imgs/robot-solid.svg" alt="Change model">
-        <h4>Change model</h4>
+        <h4>{{ model_loaded ? 'Change model' : 'Load model' }}</h4>
       </div>
       <div class="sidebar-menu-item"  (click)="reloadModel()" *ngIf="this.model_loaded">
         <img src="/assets/imgs/repeat-solid.svg" alt="Reload model">

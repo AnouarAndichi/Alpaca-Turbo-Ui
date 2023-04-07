@@ -7,8 +7,12 @@
   width: 500px;
   padding: 20px;
   z-index: 99;
+}
+
+.hide {
   display: none !important;
 }
+
 .button-container {
   display: flex;
   justify-content: center;

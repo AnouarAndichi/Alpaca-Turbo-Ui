@@ -274,7 +274,7 @@ export class AppComponent implements AfterViewInit{
     // @ts-ignore
     document.getElementById("changeModelPage").style.transform = "translateY(0)"
     // @ts-ignore
-    document.getElementById("changeModelPage").style.display = "block !important";
+    document.getElementById("changeModelPage").classList.remove('hide');
     // @ts-ignore
     document.getElementById("chat-input").disabled = true;
   }
