@@ -7,7 +7,7 @@
   width: 500px;
   padding: 20px;
   z-index: 99;
-  display: none;
+  display: none !important;
 }
 .button-container {
   display: flex;

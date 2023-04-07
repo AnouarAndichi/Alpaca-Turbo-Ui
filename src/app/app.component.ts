@@ -32,7 +32,7 @@ export class AppComponent implements AfterViewInit{
   public threads_above_80: number = 0;
   public total_threads: number = 0;
   private pre: string = "chat transcript between human and a bot named devil and the bot remembers everything from previous response Below is an instruction that describes a task. Write a response that appropriately completes the request.";
-  private fmt: string = "### Instruction:{instruction}### Response:{response}";
+  private fmt: string = "### Instruction:{instruction} ### Response:{response}";
   private timer: number = 0;
   chatHistoryData: { name: string; data: any; }[] = [];
   //information variables
@@ -113,8 +113,9 @@ export class AppComponent implements AfterViewInit{
     this.createChatNode(text, 'prompt');
     this.createChatNode("Waiting for response ...", 'waiting');
     let body = { inp: text, fmt: null, pre: null };
-    if (this.advancedMode) { // @ts-ignore
-      body = { inp: text, fmt: this.fmt, pre: this.pre };
+    if (this.advancedMode) { 
+      // @ts-ignore
+      body = { inp: text, fmt: document.getElementById('format-box').value, pre: document.getElementById('persona-box').value };
     }
 
     this.homeService.sendPrompt(body);
@@ -273,6 +274,8 @@ export class AppComponent implements AfterViewInit{
     // @ts-ignore
     document.getElementById("changeModelPage").style.transform = "translateY(0)"
     // @ts-ignore
+    document.getElementById("changeModelPage").style.display = "block !important";
+    // @ts-ignore
     document.getElementById("chat-input").disabled = true;
   }
 
@@ -333,10 +336,14 @@ export class AppComponent implements AfterViewInit{
       this.pre = res[0] + " " + res[1];
       this.fmt = res[2];
       // @ts-ignore
-      document.getElementById('persona-box').innerText = this.pre;
+      document.getElementById('persona-box').value = this.pre;
       // @ts-ignore
-      document.getElementById('format-box').innerText = this.fmt;
+      document.getElementById('format-box').value = this.fmt;
     });
+  }
+
+  addLineBreaks(text: string) {
+    return text.replace(/\n/g, '<br>');
   }
 
   openNewChat() {
