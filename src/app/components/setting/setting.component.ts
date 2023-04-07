@@ -22,13 +22,16 @@ export class SettingComponent {
   @Input()
   model_loaded: string = "";
   models: [] = [];
-  constructor(private http: HttpClient, private SettingService: SettingServiceService,
+  private notification: HTMLElement | undefined;
+
+  constructor(private SettingService: SettingServiceService,
               private homeService: HomeServiceService, private changeModelService: ChangeModelServiceService) {}
 
   ngOnInit(): void {
     this.getSetting();
     // @ts-ignore
     document.getElementById("setting-page").style.display = "none";
+    this.notification = document.querySelector('.notificationText') as HTMLElement;
   }
 
   closeSetting() {
@@ -51,11 +54,9 @@ export class SettingComponent {
     });
   }
 
-  resetSetting() {
-
-  }
-
   changeSetting() {
+    this.notification?.parentElement?.classList.remove('showNotification');
+
     let body = {
       "n_predict": this.n_predict,
       "repeat_last_n": this.repeat_last_n,
@@ -71,23 +72,27 @@ export class SettingComponent {
     this.SettingService.postSetting(body).subscribe((response) => {
       if (response.success) {
         // @ts-ignore
-        document.querySelector('.notification').innerText = "Setting has been changed successfully !";
+        this.notification.innerText = "Setting has been changed successfully !";
+        this.notification?.parentElement?.classList.add('showNotification');
+        this.closeSetting();
       }
     });
 
     this.SettingService.getSetting().subscribe((res) => {
       if(res.seed != this.seed || res.repeat_last_n != this.repeat_last_n || res.n_predict != this.n_predict){
         this.SettingService.onloadModel().subscribe();
-        console.log(res);
     
         this.changeModelService.loadModels().subscribe((res) => {
           this.models = res;
           //@ts-ignore
-          document.querySelector('.notification').innerText = "Setting has been changed successfully, Waiting to reload the model !";
+          this.notification.innerText = "Setting has been changed successfully, Waiting to reload the model !";
+          this.notification?.parentElement?.classList.add('showNotification');
           // @ts-ignore
           this.changeModelService.changeModel(this.models.indexOf(this.model_loaded)).subscribe((res) => {
             //@ts-ignore
-            document.querySelector('.notification').innerText = "Setting has been changed successfully !";
+            this.notification.innerText = "Setting has been changed successfully !";
+            this.notification?.parentElement?.classList.add('showNotification');
+            this.closeSetting();
           })
         })
       }

@@ -54,8 +54,8 @@
         <img src="/assets/imgs/robot-solid.svg" alt="Change model">
         <h4>Change model</h4>
       </div>
-      <div class="sidebar-menu-item" (click)="reloadModel()">
-        <img src="/assets/imgs/robot-solid.svg" alt="Change model">
+      <div class="sidebar-menu-item"  (click)="reloadModel()" *ngIf="this.model_loaded">
+        <img src="/assets/imgs/repeat-solid.svg" alt="Reload model">
         <h4>Reload model</h4>
       </div>
       <div class="icons">
@@ -143,9 +143,9 @@
           <img class="sendChat" src="/assets/imgs/paper-plane-solid.svg" alt="send">
         </button>
       </form>
-
     </div>
   </div>
 </div>
+<div class="notification"><span class="notificationText"></span></div>
 </body>
 </html>

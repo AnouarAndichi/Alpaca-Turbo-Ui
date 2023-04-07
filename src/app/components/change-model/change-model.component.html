@@ -7,8 +7,11 @@
   </div>
 
   <div class="buttons">
-    <div class="button-container">
+    <div class="button-container" *ngIf="this.model_loaded">
       <button class="button" id="change" (click)="changeModel()">Change</button>
+    </div>
+    <div class="button-container" *ngIf="!this.model_loaded">
+      <button class="button" id="change" (click)="changeModel()">Load</button>
     </div>
     <div class="button-container">
       <button class="button" id="close" (click)="closeModel()">Close</button>

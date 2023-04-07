@@ -481,6 +481,27 @@ filter: invert(100%) sepia(3%) saturate(11%) hue-rotate(348deg) brightness(102%)
   display: none;
 }
 
+.notification {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+  color: white;
+  background-color: #657575;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  z-index: 99;
+  display: none;
+  opacity: 0;
+}
+
+.showNotification {
+  display: block;
+  animation: fadeAndRemove 6s ease-out;
+}
+
+
+
 @media screen and (max-width: 1000px) {
   .hero-content .top img {
     width: 50px;
@@ -552,5 +573,22 @@ filter: invert(100%) sepia(3%) saturate(11%) hue-rotate(348deg) brightness(102%)
     width: 20px;
     margin: 0 10px;
     z-index: 9;
+  }
+}
+
+
+@keyframes fadeAndRemove {
+  0% {
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  95% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    display: none;
   }
 }

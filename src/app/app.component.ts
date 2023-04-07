@@ -1,5 +1,7 @@
 import {AfterViewInit, Component} from '@angular/core';
 import {HomeServiceService} from "./services/home-service.service";
+import { SettingServiceService } from './services/setting-service.service';
+import { ChangeModelServiceService } from './services/change-model-service.service';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +17,7 @@ export class AppComponent implements AfterViewInit{
   private chatInput: HTMLElement | undefined;
   private chatHistory: HTMLElement | undefined;
   private chatSection: HTMLElement | undefined;
+  private notification: HTMLElement | undefined;
   private outputText: string = "";
   private personas: [] = [];
 
@@ -34,7 +37,7 @@ export class AppComponent implements AfterViewInit{
   //information variables
 
 
-  constructor(private homeService: HomeServiceService) {}
+  constructor(private homeService: HomeServiceService, private settingService: SettingServiceService, private changeModelService: ChangeModelServiceService) {}
 
   ngOnInit(): void {
     this.ReceiveResponseStream();
@@ -48,6 +51,7 @@ export class AppComponent implements AfterViewInit{
     this.chatInput = document.getElementById('chat-input') as HTMLElement;
     this.chatHistory = document.querySelector('.recent-chats') as HTMLElement;
     this.chatSection = document.querySelector('.chat-section') as HTMLElement;
+    this.notification = document.querySelector('.notificationText') as HTMLElement;
     this.getAllPersonas();
     this.getHistoryChat();
 
@@ -69,13 +73,23 @@ export class AppComponent implements AfterViewInit{
   }
 
   openAdvancedMode() {
+    this.notification?.parentElement?.classList.remove('showNotification');
+
     if (this.advancedMode) {
+      // @ts-ignore
+      this.notification.innerText = "You are currently in simple mode.";
+      this.notification?.parentElement?.classList.add('showNotification');
+
       // @ts-ignore
       document.querySelector(".recent-chats").style.display = "block";
       // @ts-ignore
       document.querySelector(".advanced-mode").style.display = "none";
       this.advancedMode = false;
     }else {
+      // @ts-ignore
+      this.notification.innerText = "You are currently in advanced mode.";
+      this.notification?.parentElement?.classList.add('showNotification');
+
       // @ts-ignore
       document.querySelector(".recent-chats").style.display = "none";
       // @ts-ignore
@@ -421,10 +435,17 @@ export class AppComponent implements AfterViewInit{
   }
 
   removeHistory() {
+    this.notification?.parentElement?.classList.remove('showNotification');
+
+
     this.homeService.removeHistory().subscribe();
     this.chatHistoryData = [];
     let recentChats = document.querySelectorAll('.recent-chat');
     recentChats.forEach((history) => history.remove());
+
+    // @ts-ignore
+    this.notification.innerText = "All chat history has been removed.";
+    this.notification?.parentElement?.classList.add('showNotification');
   }
 
   openSideBarMenu() {
@@ -433,6 +454,15 @@ export class AppComponent implements AfterViewInit{
   }
 
   reloadModel(){
-    
+    this.notification?.parentElement?.classList.remove('showNotification');
+
+    this.settingService.onloadModel().subscribe();
+    this.changeModelService.loadModels().subscribe((res) => {
+      this.changeModelService.changeModel(res.indexOf(this.model_loaded)).subscribe((res) => {
+        // @ts-ignore
+        this.notification.innerText = res.status;
+        this.notification?.parentElement?.classList.add('showNotification');
+      })
+    })
   }
 }
