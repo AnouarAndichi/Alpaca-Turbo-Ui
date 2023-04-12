@@ -19,6 +19,7 @@ export class SettingComponent {
   threads: number = 4;
   top_k: number = 40;
   top_p: number = 0.9;
+  batch_size: number = 10;
   @Input()
   model_loaded: string = "";
   models: [] = [];
@@ -51,6 +52,7 @@ export class SettingComponent {
       this.threads = response.threads;
       this.top_k = response.top_k;
       this.top_p = response.top_p;
+      this.batch_size = response.batch_size;
     });
   }
 
@@ -65,7 +67,8 @@ export class SettingComponent {
       "temp": this.temp,
       "threads": this.threads,
       "top_k": this.top_k,
-      "top_p": this.top_p
+      "top_p": this.top_p,
+      "batch_size": this.batch_size
     }
     this.homeService.stopGenerating().subscribe();
 
@@ -79,7 +82,7 @@ export class SettingComponent {
     });
 
     this.SettingService.getSetting().subscribe((res) => {
-      if(res.seed != this.seed || res.repeat_last_n != this.repeat_last_n || res.n_predict != this.n_predict){
+      if(res.seed != this.seed || res.repeat_last_n != this.repeat_last_n || res.n_predict != this.n_predict || res.batch_size != this.batch_size){
         this.SettingService.onloadModel().subscribe();
     
         this.changeModelService.loadModels().subscribe((res) => {

@@ -76,3 +76,26 @@ h2 {
   text-align: center;
   margin-top: 20px;
 }
+
+
+.format {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.formatText {
+  font-size: 14px;
+  background-color: #f0ffff8a;
+  padding: 10px;
+  word-wrap: break-word;
+  width: 150px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.formatSelected{
+  border: #23b499 2px solid;
+  background-color: #23b49936;
+}

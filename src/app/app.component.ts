@@ -10,12 +10,10 @@ import { ChangeModelServiceService } from './services/change-model-service.servi
 })
 export class AppComponent implements AfterViewInit{
   title = 'Angular-Turbo';
-  private advancedMode = false;
-  private sendButton: HTMLElement | undefined;
+  public advancedMode = false;
   private mainHero: HTMLElement | undefined;
   private sideBar: HTMLElement | undefined;
   private chatInput: HTMLElement | undefined;
-  private chatHistory: HTMLElement | undefined;
   private chatSection: HTMLElement | undefined;
   private notification: HTMLElement | undefined;
   private outputText: string = "";
@@ -31,8 +29,9 @@ export class AppComponent implements AfterViewInit{
   public total_cores: number = 0;
   public threads_above_80: number = 0;
   public total_threads: number = 0;
-  private pre: string = "chat transcript between human and a bot named devil and the bot remembers everything from previous response Below is an instruction that describes a task. Write a response that appropriately completes the request.";
+  private pre: string = "A bot named ChatyBot that remembers everything from previous responses. Complete the following:";
   private fmt: string = "### Instruction:{instruction} ### Response:{response}";
+  private adv_fmt: string = "### Instruction:{instruction} ### Response:{response}";
   private timer: number = 0;
   chatHistoryData: { name: string; data: any; }[] = [];
   //information variables
@@ -46,11 +45,9 @@ export class AppComponent implements AfterViewInit{
   }
 
   ngAfterViewInit(){
-    this.sendButton = document.getElementById('send-chat') as HTMLElement;
     this.mainHero = document.querySelector('.hero-section') as HTMLElement;
     this.sideBar = document.querySelector('.sidebar') as HTMLElement;
     this.chatInput = document.getElementById('chat-input') as HTMLElement;
-    this.chatHistory = document.querySelector('.recent-chats') as HTMLElement;
     this.chatSection = document.querySelector('.chat-section') as HTMLElement;
     this.notification = document.querySelector('.notificationText') as HTMLElement;
     this.getAllPersonas();
@@ -112,7 +109,7 @@ export class AppComponent implements AfterViewInit{
     let text = this.chatInput.value;
     this.createChatNode(text, 'prompt');
     this.createChatNode("Waiting for response ...", 'waiting');
-    let body = { inp: text, fmt: null, pre: null };
+    let body = { inp: text, fmt: this.fmt, pre: null };
     if (this.advancedMode) { 
       // @ts-ignore
       body = { inp: text, fmt: document.getElementById('format-box').value, pre: document.getElementById('persona-box').value };
@@ -134,7 +131,7 @@ export class AppComponent implements AfterViewInit{
         let waiting_icon = document.querySelector('.jawn');
         if(waiting_icon) waiting_icon.remove();
         // @ts-ignore
-        document.getElementById('waiting_prompt').innerHTML = this.outputText;
+        document.getElementById('waiting_prompt').innerText = this.outputText;
         // @ts-ignore
         document.getElementById('waiting_prompt').style.whiteSpace = "pre-wrap";
 
@@ -192,7 +189,7 @@ export class AppComponent implements AfterViewInit{
       mainNod.className = 'prompt';
       img.src = '/assets/imgs/circle-user-solid.svg';
       img.alt = 'user logo';
-      h4.innerHTML = text;
+      h4.innerText = text;
     }else if ('response') {
       let infoDiv = document.createElement('div');
       infoDiv.classList.add('infoDiv');
@@ -203,7 +200,7 @@ export class AppComponent implements AfterViewInit{
       img.src = '/assets/imgs/alpaca.png';
       img.alt = 'alpaca logo';
       img.classList.add("chatlogo");
-      h4.innerHTML = text;
+      h4.innerText = text;
       h4.id = 'waiting_prompt';
     }
 
@@ -334,11 +331,11 @@ export class AppComponent implements AfterViewInit{
     let name = $event.target.value;
     this.homeService.getPersonaByName(name).subscribe((res) => {
       this.pre = res[0] + " " + res[1];
-      this.fmt = res[2];
+      this.adv_fmt = res[2];
       // @ts-ignore
       document.getElementById('persona-box').value = this.pre;
       // @ts-ignore
-      document.getElementById('format-box').value = this.fmt;
+      document.getElementById('format-box').value = this.adv_fmt;
     });
   }
 
@@ -362,6 +359,7 @@ export class AppComponent implements AfterViewInit{
     this.clearConversation();
     this.showMainHero();
     this.getHistoryChat();
+    this.reloadModel();
     // @ts-ignore
     document.querySelector('.chat-input').disabled = false;
   }
@@ -480,5 +478,14 @@ export class AppComponent implements AfterViewInit{
         this.notification?.parentElement?.classList.add('showNotification');
       })
     })
+  }
+
+  changeFormat(format: string) {
+    if (format === 'format1') this.fmt = "### Instruction:{instruction} ### Response:{response}";
+    if (format === 'format2') this.fmt = "### Human:{instruction} ### Assistant:{response}";
+  }
+
+  reloadThePage() {
+    window.location.reload();
   }
 }

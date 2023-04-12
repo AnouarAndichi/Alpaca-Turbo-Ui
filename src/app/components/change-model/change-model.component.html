@@ -1,4 +1,20 @@
 <div class="card hide" id="changeModelPage">
+  <div class="format">
+    <div class="format1 formatSelected">
+      <p class="formatText" (click)="this.changeFormat('format1')">
+        ### Instruction: <br>{{ '{' }}instruction{{ '}' }} <br>
+        ### Response: <br>{{ '{' }}response{{ '}' }}
+      </p>
+    </div>
+    <div class="format2" (click)="this.changeFormat('format2')">
+      <p class="formatText">
+        ### Human: <br>{{ '{' }}instruction{{ '}' }} <br>
+        ### Assistant: <br>{{ '{' }}response{{ '}' }}
+      </p>
+    </div>
+  </div>
+
+
   <div class="select">
     <select name="format" id="modelType" (change)="selectedModel($event)">
       <option selected disabled>Choose a model</option>

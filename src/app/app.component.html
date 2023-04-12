@@ -11,10 +11,10 @@
 
 <body>
 <app-setting [model_loaded]="model_loaded" id="setting-page"></app-setting>
-<app-change-model [model_loaded]="model_loaded"></app-change-model>
+<app-change-model [model_loaded]="model_loaded" (changeFormatEvent)="changeFormat($event)"></app-change-model>
 <div class="container">
   <div class="sidebar">
-    <div class="sidebar-header">
+    <div class="sidebar-header" (click)="reloadThePage()">
       <img class="logo" src="/assets/imgs/alpaca.png" alt="logo">
       <h3>Alpaca Turbo</h3>
     </div>
@@ -46,7 +46,7 @@
 
     </div>
     <div class="sidebar-menu">
-      <div class="sidebar-menu-item">
+      <div class="sidebar-menu-item" *ngIf="!this.advancedMode">
         <img src="/assets/imgs/paper-plane-solid.svg" alt="Clear conversations">
         <h4 (click)="removeHistory()">Clear conversations</h4>
       </div>

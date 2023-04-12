@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Injectable, Input, OnInit} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Injectable, Input, OnInit, Output} from '@angular/core';
 import {ChangeModelServiceService} from "../../services/change-model-service.service";
 @Component({
   selector: 'app-change-model',
@@ -14,6 +14,8 @@ export class ChangeModelComponent implements OnInit{
   model: number | undefined;
   @Input()
   model_loaded: string = "";
+  @Output() 
+  changeFormatEvent = new EventEmitter<string>();
   private notification: HTMLElement | undefined;
   constructor(private changeModelService: ChangeModelServiceService) { }
 
@@ -69,5 +71,12 @@ export class ChangeModelComponent implements OnInit{
   selectedModel(event: Event): void {
     // @ts-ignore
     this.model = event.target.selectedIndex - 1;
+  }
+
+  changeFormat(value: string) {
+    document.querySelectorAll('.formatSelected').forEach(el => el.classList.remove('formatSelected'));
+    // @ts-ignore
+    document.querySelector(`.${value}`).classList.add('formatSelected');
+    this.changeFormatEvent.emit(value);
   }
 }

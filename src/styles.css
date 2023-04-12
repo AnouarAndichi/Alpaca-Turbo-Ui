@@ -71,6 +71,7 @@ body {
 }
 
 .sidebar-header {
+  cursor: pointer;
   padding: 20px;
   display: flex;
   align-items: center;
@@ -279,7 +280,6 @@ select::-ms-expand {
   margin-top: 20px;
   display: flex;
   align-items: center;
-  justify-content: center;
   height: 100%;
   width: 100%;
   flex-direction: column;
