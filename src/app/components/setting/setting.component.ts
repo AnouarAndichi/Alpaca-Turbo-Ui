@@ -20,13 +20,16 @@ export class SettingComponent {
   top_k: number = 40;
   top_p: number = 0.9;
   batch_size: number = 10;
+  models_directory: string = "models";
+  antiprompt: string = "### Human:";
   @Input()
   model_loaded: string = "";
   models: [] = [];
   private notification: HTMLElement | undefined;
 
   constructor(private SettingService: SettingServiceService,
-              private homeService: HomeServiceService, private changeModelService: ChangeModelServiceService) {}
+              private homeService: HomeServiceService, 
+              private changeModelService: ChangeModelServiceService) {}
 
   ngOnInit(): void {
     this.getSetting();
@@ -53,6 +56,8 @@ export class SettingComponent {
       this.top_k = response.top_k;
       this.top_p = response.top_p;
       this.batch_size = response.batch_size;
+      this.models_directory = response.models_directory;
+      this.antiprompt = response.antiprompt;
     });
   }
 
@@ -68,7 +73,9 @@ export class SettingComponent {
       "threads": this.threads,
       "top_k": this.top_k,
       "top_p": this.top_p,
-      "batch_size": this.batch_size
+      "batch_size": this.batch_size,
+      "models_directory": this.models_directory,
+      "antiprompt": this.antiprompt
     }
     this.homeService.stopGenerating().subscribe();
 
@@ -77,6 +84,7 @@ export class SettingComponent {
         // @ts-ignore
         this.notification.innerText = "Setting has been changed successfully !";
         this.notification?.parentElement?.classList.add('showNotification');
+        this.loadModels();
         this.closeSetting();
       }
     });
@@ -99,6 +107,23 @@ export class SettingComponent {
           })
         })
       }
+    });
+  }
+
+  loadModels(): void {
+    this.changeModelService.loadModels().subscribe((response: []) => {
+      const mySelect = document.getElementById('modelType') as HTMLSelectElement;
+
+      while (mySelect.firstChild) {
+        mySelect.firstChild.remove();
+      }
+
+      response.forEach(model => {
+        const newOption = document.createElement('option');
+        newOption.value = model;
+        newOption.text = model;
+        mySelect.appendChild(newOption);
+      });
     });
   }
 }

@@ -41,15 +41,20 @@
       <div class="entry">batch_size</div>
       <input class="value" type="text"  [(ngModel)]="batch_size">
     </div>
+    <div class="row">
+      <div class="entry">antiprompt</div>
+      <input class="value" type="text"  [(ngModel)]="antiprompt">
+    </div>
+    <div class="row">
+      <div class="entry">models location</div>
+      <input class="value" type="text"  [(ngModel)]="models_directory">
+    </div>
 
 
     <div class="buttons">
       <div class="button-container">
         <button class="button" id="change" (click)="changeSetting()">Save</button>
       </div>
-<!--      <div class="button-container">-->
-<!--        <button class="button" id="reset" (click)="resetSetting()">Reset</button>-->
-<!--      </div>-->
       <div class="button-container">
         <button class="button" id="close" (click)="closeSetting()">Close</button>
       </div>

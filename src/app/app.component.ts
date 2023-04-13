@@ -30,8 +30,8 @@ export class AppComponent implements AfterViewInit{
   public threads_above_80: number = 0;
   public total_threads: number = 0;
   private pre: string = "A bot named ChatyBot that remembers everything from previous responses. Complete the following:";
-  private fmt: string = "### Instruction:{instruction} ### Response:{response}";
-  private adv_fmt: string = "### Instruction:{instruction} ### Response:{response}";
+  private fmt: string = "### Instruction:<\n\n>{instruction}\n\n### Response:\n\n{response}";
+  private adv_fmt: string = "### Instruction:\n\n{instruction}\n\n### Response:\n\n{response}";
   private timer: number = 0;
   chatHistoryData: { name: string; data: any; }[] = [];
   //information variables
@@ -481,8 +481,8 @@ export class AppComponent implements AfterViewInit{
   }
 
   changeFormat(format: string) {
-    if (format === 'format1') this.fmt = "### Instruction:{instruction} ### Response:{response}";
-    if (format === 'format2') this.fmt = "### Human:{instruction} ### Assistant:{response}";
+    if (format === 'format1') this.fmt = "### Instruction:\n\n{instruction}\n\n### Response:\n\n{response}";
+    if (format === 'format2') this.fmt = "### Human:\n\n{instruction}\n\n###\n\nAssistant:{response}";
   }
 
   reloadThePage() {
